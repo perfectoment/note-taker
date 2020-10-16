@@ -5,6 +5,7 @@ var path = require("path");
 var fs = require("fs");
 var database = require("./db/db.json")
 const util = require("util");
+const uuid = require("uuidv4")
 
 
 // Set up the Express App
@@ -26,24 +27,24 @@ app.get("/api/notes", function(req, res) {
   });
   
 //Writing the files into db.json
-app.post("/api/notes", function(req, res) {})
+app.post("/api/notes", function(req, res) {
   var note = req.body;
-//   fs.readFile(path.join(__dirname,"./db/db.json"), "utf8", function(err, data) {
-//   var parsedData = JSON.parsserve(data);
-//   var combinedData = [newNote, ...parsedData];
-  
-  // });
-  // // writeFileAsync("./db.db.json", combinedData, "utf8")
+  note.id = uuidv4()
+  database.push(note);
+  fs.writeFile("./db/db.json", JSON.stringify(database), (err) => {
+    if(err){
+      throw err;
+    }
+    res.json("Added!")
+  }); 
+});
+;
+
+app.delete("/api/notes/:id"), function (req, res){
+  deleteId = parseInt(req.body.id)
 
 
-//  readFileAsync("./db/db.json", "utf8")
-//  .then((notes) => 
-//  [newNote, ...notes])
-//  .then(updatedNotes => console.log(updatedNotes))
-
-  
-//   res.json("Successfully added note")
-// });
+}
 
 app.get("/notes", function(req, res) {
   res.sendFile(path.join(__dirname, "./public/notes.html"));
